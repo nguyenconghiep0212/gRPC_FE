@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  height: 100%;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.app .header {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
+.app .body {
+  padding-top: 8px;
+  padding-right: 12px;
+  flex: 1 1 auto; /* Fills the remaining height */
+  overflow-y: auto; /* Makes the content scrollable */
+  background-color: #f0f0f0; /* Example color */
+  padding: 20px; /* Optional padding */
+}
+
+.app .footer {
+}
