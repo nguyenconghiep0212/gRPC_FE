@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import '@mdi/font/css/materialdesignicons.css';
+@import './theme.css';
 
 body,
 html {
@@ -7,6 +9,14 @@ html {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 #app {

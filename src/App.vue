@@ -1,44 +1,28 @@
 <template>
-  <div class="app">
-    <div class="header">
-      <div class="grid grid-cols-2">
-        <div class="col-span-1">
-          <n-menu v-model:value="activeKey" mode="horizontal" :options="menuList" responsive />
-        </div>
-        <div class="cols-span-1 flex justify-end items-center">
-          <n-avatar
-            round
-            size="small"
-            src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-          />
-        </div>
+  <n-config-provider :theme="settingStore.theme == THEME.DARK.toString() ? darkTheme : lightTheme">
+    <div class="app">
+      <div class="header">
+        <Header />
       </div>
+      <div class="body">
+        <main>
+          <RouterView />
+        </main>
+      </div>
+      <div class="footer"></div>
     </div>
-    <div class="body">
-      <main>
-        <RouterView />
-      </main>
-    </div>
-    <div class="footer"></div>
-  </div>
+    <n-global-style />
+  </n-config-provider>
 </template>
 
 <script setup lang="ts">
-import type { MenuOption } from 'naive-ui'
-import { NMenu, NAvatar } from 'naive-ui'
-import { computed, h, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import { routerArray } from './router/index'
+import Header from '@/components/Header.vue'
+import { darkTheme, lightTheme, NConfigProvider, NGlobalStyle } from 'naive-ui'
+import { useSettingStore } from '@/stores/settingStore'
+import { THEME } from './type/SettingEnum'
 
-const menuList = computed<MenuOption[]>(() => {
-  return routerArray.map((item) => {
-    return {
-      label: () => h(RouterLink, { to: item.path }, item.name),
-      key: item.key,
-    }
-  })
-})
-const activeKey = ref('dashboard')
+const settingStore = useSettingStore()
 </script>
 
 <style lang="css" src="./styles/main.css"></style>
+<style lang="css" src="./styles/theme.css"></style>

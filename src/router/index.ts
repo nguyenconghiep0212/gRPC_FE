@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Dashboard from '../components/Dashboard.vue'
-import ProjectList from '../components/ProjectList.vue'
-import OrderList from '../components/OrderList.vue'
-import MachineList from '../components/MachineList.vue'
-import Analytic from '../components/Analytic.vue'
-import ContactList from '../components/ContactList.vue'
+import Dashboard from '../views/Dashboard.vue'
+import ProjectList from '../views/ProjectList.vue'
+import OrderList from '../views/OrderList.vue'
+import MachineList from '../views/MachineList.vue'
+import Analytic from '../views/Analytic.vue'
+import ContactList from '../views/ContactList.vue'
+import TestSuite from '../views/TestSuite.vue'
 
 const routerArray = [
   { path: '/', name: 'Dashboard', key: 'dashboard', component: Dashboard },
@@ -13,6 +14,7 @@ const routerArray = [
   { path: '/machine', name: 'Machines', key: 'machine', component: MachineList },
   { path: '/analytic', name: 'Analytic', key: 'analytic', component: Analytic },
   { path: '/contact', name: 'Contact', key: 'contact', component: ContactList },
+  { path: '/testsuite', name: 'TestSuite', key: 'testsuite', component: TestSuite },
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
