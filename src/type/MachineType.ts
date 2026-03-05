@@ -3,8 +3,10 @@ export type MachineType = {
   name: string
   alias: string
   details: string
-  vendor: number
+  vendorId: number
+  vendor: string
   purchasePrice: number
   purchaseDate: Date
-  site: number
+  siteId: number
+  site: string
 }

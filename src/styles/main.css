@@ -45,5 +45,9 @@ body {
   padding: 20px; /* Optional padding */
 }
 
-.app .footer {
+.card_title {
+  color: var(--text-color);
+  font-size: large;
+  font-weight: bold;
+  padding-bottom: 10px;
 }
