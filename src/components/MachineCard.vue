@@ -1,67 +1,104 @@
 <template>
   <div>
-    <KitTable :actions="true">
-      <template #header>
-        <th>
-          <span>name</span>
-        </th>
-        <th>
-          <span>alias</span>
-        </th>
-      </template>
-      <template #data>
-        <tr v-for="(item, index) in machineList" :key="index">
-          <td>
-            {{ item.name }}
-          </td>
-          <td>
-            {{ item.alias }}
-          </td>
-          <td>
-            <div v-for="(actionItem, index) in actions" :key="index">
-              <n-button @click="() => actionItem.function(item.id)">
-                <div v-if="!!actionItem.icon">
-                  <n-tooltip trigger="hover">
-                    <template #trigger>
-                      <component :is="actionItem.icon"> </component>
-                    </template>
-                    {{ actionItem.title }}
-                  </n-tooltip>
-                </div>
-                <div v-else>
-                  {{ actionItem.title }}
-                </div>
-              </n-button>
-            </div>
-          </td>
-        </tr>
-      </template>
-    </KitTable>
+    <n-data-table :bordered="false" :single-line="false" :columns="columns" :data="data" />
+    <div class="flex justify-end mt-4">
+      <n-pagination v-model:page="page" :page-count="pageCount" show-size-picker :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize" @update:page-size="($event) => {
+          onPageSizeChange($event)
+          $emit('emitPageSizeChange', $event)
+        }" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { MachineType } from '@/type/MachineType'
-import { computed, h } from 'vue'
-import KitTable from '@/components/KitTable.vue'
-import { NButton, NTooltip } from 'naive-ui'
+import { computed, h, ref } from 'vue'
+import type { DataTableColumns, } from 'naive-ui';
+import { NPagination, NDataTable, NButton } from 'naive-ui'
+import type { ListModel } from '@/type/ListType';
+
 
 const props = defineProps<{
-  machines?: MachineType[]
+  machines: ListModel<MachineType>
 }>()
+const page = ref(1)
+const pageSize = ref(20);
+const pageCount = ref(props.machines.total / pageSize.value)
 
-const machineList = computed(() => props.machines)
-const actions = [
-  {
-    title: 'Health Check',
-    icon: () => h('i', { class: 'mdi mdi-wrench' }),
-    function: (id: number) => checkMachineHealth(id),
-  },
-]
 
-function checkMachineHealth(id: number) {
-  console.log(id)
+function onPageSizeChange(event: number) {
+  pageSize.value = event
 }
+
+const data = computed(() => props.machines?.data)
+const columns = CreateColumn({
+  checkMachineHealth(rowData) {
+    console.log(rowData.id)
+  }
+})
+
+function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: MachineType) => void }): DataTableColumns<MachineType> {
+  const columns: DataTableColumns<MachineType> = [
+    {
+      title: 'Name',
+      key: 'name'
+    },
+    {
+      title: 'Alias',
+      key: 'alias'
+    },
+    {
+      title: 'Vendor',
+      key: 'vendor'
+    },
+    {
+      title: 'Owner',
+      key: 'lineOwner'
+    },
+    {
+      title: 'Test Suite',
+      key: 'testSuite'
+    },
+
+    {
+      title: 'Project',
+      key: 'project'
+    },
+    {
+      title: 'Site',
+      key: 'site'
+    },
+    {
+      title: 'Health',
+      key: 'health'
+    },
+    {
+      title: 'Last Check',
+      key: 'lastHealthCheck'
+    },
+    {
+      title: 'Online',
+      key: 'isOnline'
+    },
+    {
+      title: 'Last Online',
+      key: 'lastOnline'
+    },
+    {
+      title: 'Action',
+      key: '#',
+      render(row) {
+        return h(NButton, { text: true }, [
+          h('i', { class: 'mdi mdi-plus-circle text-green-400', onClick: () => checkMachineHealth(row) })
+        ])
+      },
+
+    },
+  ]
+  return columns
+}
+
 </script>
 
 <style></style>

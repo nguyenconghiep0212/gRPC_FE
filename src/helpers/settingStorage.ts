@@ -3,6 +3,7 @@ import { LANGUAGE, THEME } from '@/type/SettingEnum'
 const STORAGE_KEYS = {
   theme: 'app.theme',
   language: 'app.language',
+  activeMenu: 'router.active_router'
 }
 
 export function getTheme() {
@@ -19,4 +20,12 @@ export function getLanguage() {
 
 export function setLanguage(lang: string) {
   localStorage.setItem(STORAGE_KEYS.language, lang)
+}
+
+export function getActiveMenu() {
+  return localStorage.getItem(STORAGE_KEYS.activeMenu)
+}
+
+export function setActiveMenu(activeMenu: string) {
+  localStorage.setItem(STORAGE_KEYS.activeMenu, activeMenu)
 }

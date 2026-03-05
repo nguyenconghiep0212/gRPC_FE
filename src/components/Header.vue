@@ -18,11 +18,7 @@
             <i class="mdi mdi-brightness-6 text-red-500"></i>
           </template>
         </n-button>
-        <n-avatar
-          round
-          size="small"
-          src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-        />
+        <n-avatar round size="small" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
       </div>
     </div>
   </div>
@@ -35,16 +31,21 @@ import { computed, h, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { routerArray } from '@/router/index'
 import { useSettingStore } from '@/stores/settingStore'
+import { getActiveMenu, setActiveMenu } from '@/helpers/settingStorage'
 const settingStore = useSettingStore()
 const menuList = computed<MenuOption[]>(() => {
   return routerArray.map((item) => {
     return {
-      label: () => h(RouterLink, { to: item.path }, item.name),
+      label: () => h(RouterLink, {
+        to: item.path, onClick: () => {
+          setActiveMenu(item.key)
+        }
+      }, item.name),
       key: item.key,
     }
   })
 })
-const activeKey = ref('dashboard')
+const activeKey = ref(getActiveMenu() || 'dashboard')
 
 function OnToggleTheme() {
   settingStore.toggleTheme()

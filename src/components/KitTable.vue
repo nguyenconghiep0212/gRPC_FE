@@ -1,33 +1,19 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <template>
   <div>
-    <n-table>
-      <thead>
-        <tr>
-          <slot name="header"></slot>
-          <th v-if="props.actions">
-            <slot name="action_title">
-              <span> Actions </span>
-            </slot>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <slot name="data"> </slot>
-      </tbody>
-    </n-table>
+    <n-data-table :bordered="false" :single-line="false" :columns="props.columns" :data="props.data"
+      :pagination="props.pagination" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { NTable } from 'naive-ui'
-
-type Data = {
-  value: string
-  title: string
-}
+import { NDataTable } from 'naive-ui'
+import type { PaginationProps, DataTableRowData, DataTableColumns } from 'naive-ui';
 
 const props = defineProps<{
-  data?: Data[]
-  actions?: boolean
+  columns?: DataTableColumns
+  data?: DataTableRowData[]
+  pagination?: PaginationProps
 }>()
+
 </script>

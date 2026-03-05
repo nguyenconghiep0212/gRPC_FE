@@ -15,12 +15,16 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition:
-    background-color 0.3s,
-    color 0.3s;
+    background-color 0.2s,
+    color 0.2s;
 }
 
 #app {
   height: 100%;
+}
+
+.n-config-provider {
+  height: -webkit-fill-available;
 }
 
 .app {
@@ -41,8 +45,12 @@ body {
   padding-right: 12px;
   flex: 1 1 auto; /* Fills the remaining height */
   overflow-y: auto; /* Makes the content scrollable */
-  background-color: #f0f0f0; /* Example color */
-  padding: 20px; /* Optional padding */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+  padding: 20px;
 }
 
 .card_title {

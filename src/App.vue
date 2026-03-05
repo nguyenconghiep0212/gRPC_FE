@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme="settingStore.theme == THEME.DARK.toString() ? darkTheme : lightTheme">
+  <n-config-provider :theme="theme">
     <div class="app">
       <div class="header">
         <Header />
@@ -20,8 +20,19 @@ import Header from '@/components/Header.vue'
 import { darkTheme, lightTheme, NConfigProvider, NGlobalStyle } from 'naive-ui'
 import { useSettingStore } from '@/stores/settingStore'
 import { THEME } from './type/SettingEnum'
+import { computed } from 'vue'
 
 const settingStore = useSettingStore()
+
+const theme = computed(() => {
+  document.body.setAttribute(
+    'data-theme',
+    settingStore.theme == THEME.DARK.toString() ? 'dark' : 'light',
+  )
+  return settingStore.theme == THEME.DARK.toString() ? darkTheme : lightTheme
+}
+)
+
 </script>
 
 <style lang="css" src="./styles/main.css"></style>
