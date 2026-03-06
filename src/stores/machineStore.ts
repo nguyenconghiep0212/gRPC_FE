@@ -5,6 +5,8 @@ import type { MachineType } from '@/type/MachineType'
 
 export const useMachineStore = defineStore('machine', () => {
   const machineList = ref<ListModel<MachineType>>({ data: [], total: 0 })
-
-  return { machineList }
+  const page = ref(1)
+  const pageSize = ref(10)
+  const filter = ref({})
+  return { machineList, page, pageSize, filter }
 })

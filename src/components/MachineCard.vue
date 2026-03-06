@@ -1,12 +1,19 @@
 <template>
   <div>
+    <div class="mb-2 flex justify-end">
+      <n-button :disabled="selectedMachines.length == 0" type="primary" size="small">
+        <span class="mr-1">
+          Run Health Check
+        </span>
+        <span v-if="selectedMachines.length">
+          ({{ selectedMachines.length }})
+        </span>
+      </n-button>
+    </div>
     <n-data-table :bordered="false" :single-line="false" :columns="columns" :data="data" />
-    <div class="flex justify-end mt-4">
+    <div class="flex justify-end mt-4 ">
       <n-pagination v-model:page="page" :page-count="pageCount" show-size-picker :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize" @update:page-size="($event) => {
-          onPageSizeChange($event)
-          $emit('emitPageSizeChange', $event)
-        }" />
+        :page-size="pageSize" @update:page-size="OnPageSizeChange" @update:page="OnPageChange" />
     </div>
   </div>
 </template>
@@ -15,20 +22,29 @@
 import type { MachineType } from '@/type/MachineType'
 import { computed, h, ref } from 'vue'
 import type { DataTableColumns, } from 'naive-ui';
-import { NPagination, NDataTable, NButton } from 'naive-ui'
+import { NPagination, NDataTable, NButton, NCheckbox } from 'naive-ui'
 import type { ListModel } from '@/type/ListType';
+import { useMachineStore } from '@/stores/machineStore'
 
-
+const emits = defineEmits(['emitPageSizeChange', 'emitPageChange', 'emitSelectMachine'])
 const props = defineProps<{
   machines: ListModel<MachineType>
 }>()
-const page = ref(1)
-const pageSize = ref(20);
-const pageCount = ref(props.machines.total / pageSize.value)
+const machineStore = useMachineStore()
+const page = ref(machineStore.page)
+const pageSize = ref(machineStore.pageSize);
+const pageCount = computed(() => Math.ceil(props.machines.total / pageSize.value))
 
 
-function onPageSizeChange(event: number) {
+function OnPageSizeChange(event: number) {
   pageSize.value = event
+  machineStore.pageSize = event
+  emits('emitPageSizeChange', event)
+}
+
+function OnPageChange(event: number) {
+  machineStore.page = event
+  emits('emitPageChange', event)
 }
 
 const data = computed(() => props.machines?.data)
@@ -37,9 +53,17 @@ const columns = CreateColumn({
     console.log(rowData.id)
   }
 })
+const selectedMachines = ref<MachineType[]>([])
 
 function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: MachineType) => void }): DataTableColumns<MachineType> {
   const columns: DataTableColumns<MachineType> = [
+    {
+      title: '#',
+      key: '#',
+      render(row) {
+        return h(NCheckbox, { checked: !!selectedMachines.value.find((item) => item.id == row.id), onUpdateChecked: (event) => onMachineCheckbox(event, row) },)
+      },
+    },
     {
       title: 'Name',
       key: 'name'
@@ -56,11 +80,6 @@ function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: Ma
       title: 'Owner',
       key: 'lineOwner'
     },
-    {
-      title: 'Test Suite',
-      key: 'testSuite'
-    },
-
     {
       title: 'Project',
       key: 'project'
@@ -90,7 +109,9 @@ function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: Ma
       key: '#',
       render(row) {
         return h(NButton, { text: true }, [
-          h('i', { class: 'mdi mdi-plus-circle text-green-400', onClick: () => checkMachineHealth(row) })
+          h(NButton, { type: 'primary', size: "small", onClick: () => checkMachineHealth(row) }, [
+            h('span', { class: 'text-xs' }, 'Health Check')
+          ])
         ])
       },
 
@@ -98,7 +119,14 @@ function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: Ma
   ]
   return columns
 }
-
+function onMachineCheckbox(checkEvent: boolean, data: MachineType) {
+  if (checkEvent) {
+    selectedMachines.value.push(data)
+  } else {
+    const index = selectedMachines.value.findIndex((item) => item.id == data.id)
+    selectedMachines.value.splice(index, 1)
+  }
+}
 </script>
 
 <style></style>
