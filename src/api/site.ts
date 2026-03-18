@@ -3,7 +3,7 @@ import type { AxiosBody } from '@/type/Axios'
 import axios from './axios'
 import type { SiteType, ListModel } from '@/type'
 
-const SiteListAsync = async (params: AxiosBody): Promise<ListModel<SiteType>> => {
+const SiteListAsync = async (params: AxiosBody): Promise<SiteType[]> => {
   try {
     const response = await axios.post('/api/sites/list', params)
     return response.data

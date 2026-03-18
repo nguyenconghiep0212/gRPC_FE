@@ -2,7 +2,7 @@
   <div>
     <div class="space-y-2">
       <n-card>
-        <MachineFilter :vendorList="vendorOptions" @emitApplyFilter="ApplyFilter" />
+        <MachineFilter @emitApplyFilter="ApplyFilter" />
       </n-card>
       <n-card>
         <div class="card_title">Machine List</div>
@@ -21,18 +21,15 @@ import MachineCard from '@/components/MachineCard.vue'
 import MachineFilter from '@/components/MachineFilter.vue'
 import type { AxiosBody } from '@/type/Axios'
 import { NCard } from 'naive-ui'
-import type { ListModel } from '@/type/ListType'
-import type { MachineType } from '@/type/MachineType'
-import type { VendorType } from '@/type/vendorType'
-import { VendorListAsync } from '@/api/vendor'
+import type { MachineType, ListModel, } from '@/type'
 
 onMounted(async () => {
   await GetMachineList()
-  await GetVendorList()
+
 })
 
 const machineStore = useMachineStore()
-const vendorOptions = ref<ListModel<VendorType>>({ data: [], total: 0 })
+
 
 async function OnPageSizeChange() {
   const params: AxiosBody = {
@@ -61,17 +58,6 @@ async function GetMachineList(param: AxiosBody = {
   }
 }
 
-async function GetVendorList() {
-  const param: AxiosBody = {
-    limit: 1000,
-    offset: 0
-  }
-  const res: ListModel<VendorType> = await VendorListAsync(param)
-  if (res) {
-    vendorOptions.value.data = res.data.map(item => item)
-  }
-}
-
 async function ApplyFilter(filter: object) {
   machineStore.page = 1
   const params: AxiosBody = {
@@ -81,5 +67,6 @@ async function ApplyFilter(filter: object) {
   }
   await GetMachineList(params)
 }
+
 
 </script>

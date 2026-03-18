@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import type { MachineType } from '@/type/MachineType'
 import { computed, h, ref } from 'vue'
-import type { DataTableColumns, } from 'naive-ui';
+import { NTag, type DataTableColumns } from 'naive-ui';
 import { NPagination, NDataTable, NButton, NCheckbox } from 'naive-ui'
 import type { ListModel } from '@/type/ListType';
 import { useMachineStore } from '@/stores/machineStore'
@@ -74,7 +74,10 @@ function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: Ma
     },
     {
       title: 'Vendor',
-      key: 'vendor'
+      key: 'vendor',
+      render(row) {
+        return h(NTag, { bordered: true, type: "info" }, row.vendor)
+      }
     },
     {
       title: 'Owner',
@@ -86,7 +89,10 @@ function CreateColumn({ checkMachineHealth }: { checkMachineHealth: (rowData: Ma
     },
     {
       title: 'Site',
-      key: 'site'
+      key: 'site',
+      render(row) {
+        return h(NTag, { bordered: true, type: "info" }, row.site)
+      }
     },
     {
       title: 'Health',

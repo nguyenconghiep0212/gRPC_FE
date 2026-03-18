@@ -1,5 +1,5 @@
 export type AxiosBody = {
-  limit: number
-  offset: number
+  limit?: number
+  offset?: number
   filters?: object
 }

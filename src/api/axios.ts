@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log('Request made with:', config)
+    // console.log('Request made with:', config)
     return config // Must return the config
   },
   (error) => {
@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log('Response received:', response)
+    // console.log('Response received:', response)
     return response // Must return the response
   },
   (error) => {
